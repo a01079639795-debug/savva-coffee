@@ -1,0 +1,38 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>probe</title></head>
+<body style="font:12px monospace;white-space:pre" id="out">sampling…</body>
+<script>
+const FILES = [
+  'savva-mark-tile.jpg','hl-hours.jpg','hl-celebrations.jpg',
+  'coffee-pour-cups.jpg','three-cups-stone.jpg','three-cups-shadow.jpg',
+  'desk-morning.jpg','curbside-tray.jpg','melon-in-hand.jpg',
+  'hibiscus-pour.jpg','matcha-berry-melon.jpg','halloumi-sandwich.jpg','slush-wood-table.jpg'
+];
+const hex = (r,g,b) => '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+function load(src){return new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=src;});}
+(async () => {
+  const lines = [];
+  for (const f of FILES) {
+    const img = await load('/assets/img/' + f);
+    if (!img) { lines.push(f + ' FAILED'); continue; }
+    const w = 120, h = Math.round(img.height / img.width * 120) || 120;
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const ctx = c.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, w, h);
+    const d = ctx.getImageData(0, 0, w, h).data;
+    const buckets = new Map();
+    for (let i = 0; i < d.length; i += 4) {
+      const r = d[i], g = d[i+1], b = d[i+2];
+      const k = (r >> 3) + ',' + (g >> 3) + ',' + (b >> 3);
+      let e = buckets.get(k);
+      if (!e) { e = { n: 0, r: 0, g: 0, b: 0 }; buckets.set(k, e); }
+      e.n++; e.r += r; e.g += g; e.b += b;
+    }
+    const top = [...buckets.values()].sort((a, b) => b.n - a.n).slice(0, 6)
+      .map(e => hex(Math.round(e.r/e.n), Math.round(e.g/e.n), Math.round(e.b/e.n))
+        + ' ' + (100 * e.n / (w * h)).toFixed(1) + '%');
+    lines.push(f.padEnd(26) + top.join('  '));
+  }
+  document.getElementById('out').textContent = lines.join('\n');
+})();
+</script></html>
