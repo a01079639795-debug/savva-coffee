@@ -194,24 +194,43 @@
   }
 
   // below the desktop split, a left/right swipe over the photo steps through
-  // the drinks directly — no more scrolling the page to flip the carousel
+  // the drinks directly — no more scrolling the page to flip the carousel.
+  // The gesture's direction is locked on the first real movement, and only
+  // then does a horizontal drag call preventDefault — otherwise iOS treats
+  // the whole touch as a page scroll and the carousel never sees a touchend.
   if (pour && frames.length > 1) {
-    var pourTouch = null;
+    var pourTouch = null, pourLock = null;
     var pourMedia = pour.querySelector('.pour__media');
     pourMedia.addEventListener('touchstart', function (e) {
       if (!narrow.matches) return;
       var p = e.touches[0];
       pourTouch = { x: p.clientX, y: p.clientY };
+      pourLock = null;
     }, { passive: true });
+    pourMedia.addEventListener('touchmove', function (e) {
+      if (!pourTouch) return;
+      var p = e.touches[0];
+      var dx = p.clientX - pourTouch.x, dy = p.clientY - pourTouch.y;
+      if (pourLock === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+        pourLock = Math.abs(dx) > Math.abs(dy);
+      }
+      if (pourLock) e.preventDefault();
+    }, { passive: false });
     pourMedia.addEventListener('touchend', function (e) {
       if (!pourTouch) return;
       var p = e.changedTouches[0];
-      var dx = p.clientX - pourTouch.x, dy = p.clientY - pourTouch.y;
+      var dx = p.clientX - pourTouch.x;
+      var wasHorizontal = pourLock;
       pourTouch = null;
-      if (Math.abs(dx) < 32 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      pourLock = null;
+      if (!wasHorizontal || Math.abs(dx) < 32) return;
       var step = dx < 0 ? 1 : -1;
       if (document.dir === 'rtl') step = -step;
       setPour((current + step + frames.length) % frames.length);
+    }, { passive: true });
+    pourMedia.addEventListener('touchcancel', function () {
+      pourTouch = null;
+      pourLock = null;
     }, { passive: true });
   }
 
