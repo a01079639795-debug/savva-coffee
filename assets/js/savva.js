@@ -238,18 +238,35 @@
   var cup = document.querySelector('[data-ritual]');
   var cupStage = cup ? cup.querySelector('[data-ritual-stage]') : null;
   var cupTilt = cup ? cup.querySelector('[data-ritual-tilt]') : null;
+  var cupSettled = false;
+
+  // Below the desktop split the scene no longer pins to a scroll track and
+  // scrubs continuously with it — that read as a sharp, jarring zoom under a
+  // phone's fast momentum scroll. It still rises into place once, the first
+  // time it comes on screen: held at rest here until then, and eased across
+  // to the stylesheet's own resting values by the CSS transition in the
+  // ritual media query, rather than by scroll position.
+  if (cup && narrow.matches && !isReduced()) {
+    cup.style.setProperty('--t', '.3');
+    cup.style.setProperty('--enter', '0');
+    cup.style.setProperty('--dom', '0');
+    cup.style.setProperty('--name', '0');
+    cup.style.setProperty('--exit', '0');
+  }
+
+  function settleRitual() {
+    cupSettled = true;
+    cup.style.setProperty('--t', '.3');
+    cup.style.setProperty('--enter', '1');
+    cup.style.setProperty('--dom', '.3');
+    cup.style.setProperty('--name', '1');
+    cup.style.setProperty('--exit', '0');
+  }
 
   function updateRitual() {
     if (!cup || isReduced()) return;
-    // below the desktop split the scene no longer pins to a scroll track —
-    // it rests at the stylesheet's own values instead of scaling sharply
-    // under a phone's fast scroll, see the ritual media query in the CSS
     if (narrow.matches) {
-      cup.style.removeProperty('--t');
-      cup.style.removeProperty('--enter');
-      cup.style.removeProperty('--dom');
-      cup.style.removeProperty('--name');
-      cup.style.removeProperty('--exit');
+      if (!cupSettled && cup.getBoundingClientRect().top < window.innerHeight * 0.88) settleRitual();
       return;
     }
     var box = cup.getBoundingClientRect();
@@ -329,8 +346,18 @@
   setPour(0);
 
   reduce.addEventListener('change', function () {
-    if (isReduced()) parallax.forEach(function (el) { el.style.removeProperty('--py'); });
-    else onScroll();
+    if (isReduced()) {
+      parallax.forEach(function (el) { el.style.removeProperty('--py'); });
+      // motion just got turned off: drop the suppressed rest state so the
+      // cup reads instantly, instead of staying stuck mid-reveal
+      if (cup) {
+        cup.style.removeProperty('--t');
+        cup.style.removeProperty('--enter');
+        cup.style.removeProperty('--dom');
+        cup.style.removeProperty('--name');
+        cup.style.removeProperty('--exit');
+      }
+    } else onScroll();
   });
 
   /* --- Location card: spring tilt, click to open, real opening status ----- */
