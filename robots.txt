@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://savvacoffee.sa/sitemap.xml
+Sitemap: https://savva-coffee-madinah.netlify.app/sitemap.xml
