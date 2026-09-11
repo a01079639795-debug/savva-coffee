@@ -18,6 +18,9 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var isReduced = function () { return reduce.matches; };
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  // matches the desktop split in the stylesheet — below it, scroll-jacking
+  // sections (the signature carousel) hand off to touch instead
+  var narrow = window.matchMedia('(max-width: 61.9375rem)');
 
   // A device that told us it is modest gets the same composition with the
   // per-frame filters and blended overlays dropped — see `.lite` in the CSS.
@@ -180,12 +183,36 @@
   }
 
   function updatePour() {
-    if (!pour || !frames.length) return;
+    // below the desktop split the carousel no longer pins to a scroll track —
+    // its slide is set by swipe instead, see below
+    if (!pour || !frames.length || narrow.matches) return;
     var box = pour.getBoundingClientRect();
     var travel = box.height - window.innerHeight;
     if (travel <= 0) { setPour(0); return; }
     var p = Math.min(1, Math.max(0, -box.top / travel));
     setPour(Math.min(frames.length - 1, Math.floor(p * frames.length * 0.999)));
+  }
+
+  // below the desktop split, a left/right swipe over the photo steps through
+  // the drinks directly — no more scrolling the page to flip the carousel
+  if (pour && frames.length > 1) {
+    var pourTouch = null;
+    var pourMedia = pour.querySelector('.pour__media');
+    pourMedia.addEventListener('touchstart', function (e) {
+      if (!narrow.matches) return;
+      var p = e.touches[0];
+      pourTouch = { x: p.clientX, y: p.clientY };
+    }, { passive: true });
+    pourMedia.addEventListener('touchend', function (e) {
+      if (!pourTouch) return;
+      var p = e.changedTouches[0];
+      var dx = p.clientX - pourTouch.x, dy = p.clientY - pourTouch.y;
+      pourTouch = null;
+      if (Math.abs(dx) < 32 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      var step = dx < 0 ? 1 : -1;
+      if (document.dir === 'rtl') step = -step;
+      setPour((current + step + frames.length) % frames.length);
+    }, { passive: true });
   }
 
   /* --- The cup: one drink, one scroll-driven scene ----------------------- */
@@ -234,7 +261,10 @@
   var parallax = Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
 
   function updateParallax() {
-    if (isReduced()) return;
+    // a scroll-linked write per image, every frame, across the hero and the
+    // whole gallery is what made scrolling stutter on a phone — the shift is
+    // subtle on a small screen anyway, so it's a desktop-only touch
+    if (isReduced() || narrow.matches) return;
     var vh = window.innerHeight;
     parallax.forEach(function (el) {
       var box = el.getBoundingClientRect();

@@ -695,6 +695,16 @@ address { font-style: normal; }
 [dir="rtl"] .pour__dots li span { --o: 100%; }
 .pour__dots li.is-active span { transform: scaleX(1); }
 
+/* Below the desktop split, the pinned scroll-jack asked for a very long
+   scroll to see three photographs — a swipe left/right flips between them
+   instead (assets/js/savva.js), so the section holds its own height rather
+   than pinning across a tall track. */
+@media (max-width: 61.9375rem) {
+  .pour__track { display: none; }
+  .pour__stage { position: static; }
+  .pour__media { touch-action: pan-y; }
+}
+
 /* From desktop up the arch and the words stand side by side — mirrored in
    Arabic, where the arch takes the right. */
 @media (min-width: 62rem) {
