@@ -906,6 +906,7 @@ address { font-style: normal; }
 .atmos { padding-block: var(--section); background: var(--color-background); }
 .atmos__head { max-width: 52rem; margin-block-end: clamp(2.6rem, 5vw, 4.5rem); display: grid; gap: 1.6rem; }
 .atmos__h { max-width: 14ch; }
+.atmos__credit { margin-block-start: clamp(1rem, 2vw, 1.4rem); font-size: .78rem; line-height: 1.6; color: var(--color-muted); }
 
 .grid {
   display: grid;
@@ -1307,6 +1308,12 @@ address { font-style: normal; }
 .loc__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-block-start: 2.2rem; }
 .loc .btn--solid { --btn-bg: var(--olive-500); }
 .loc .btn--ghost { color: var(--cream-400); }
+/* the front, so the door is familiar on arrival: a square crop that keeps the
+   lit sign and the doors */
+.loc__door { margin: 2.6rem 0 0; max-width: 24rem; display: grid; gap: .75rem; }
+.loc__door img { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: 50% 36%; border-radius: 2px; }
+.loc__door figcaption { display: grid; gap: .25rem; font-size: .9rem; color: var(--cream-300); }
+.loc__door small { font-size: .72rem; color: var(--olive-300); }
 
 /* The location card, on the real map. Collapsed, it is a small plate that
    tilts toward the pointer on a spring: Bir Uthman's streets drawn flat from

@@ -65,7 +65,8 @@ const facts = {
        in the photo's own pixels. Only where the item is certain: Matcha Berry
        and Savva Melon are captioned by name on SAVVA's post; the hibiscus pour
        and the halloumi sandwich are the drink and dish already paired with
-       those photos elsewhere on the page.
+       those photos elsewhere on the page; Madini Cookies is named on SAVVA's
+       own product card, posted by SAVVA to its Google Maps listing.
      • `art` — otherwise, a drawing from src/menu-art.js of that kind of drink
        or dish. Add a `photo` to any item and it replaces the drawing.
    -------------------------------------------------------------------------- */
@@ -123,7 +124,8 @@ const menu = [
     en: 'Desserts', ar: 'الحلى',
     kicker: { en: 'Pastry', ar: 'معجّنات' },
     items: [
-      { en: 'Madini Cookies', ar: 'مديني كوكيز', price: 12, cals: 170, art: 'cookies' },
+      { en: 'Madini Cookies', ar: 'مديني كوكيز', price: 12, cals: 170, art: 'cookies',
+        photo: { src: '/assets/img/madini-cookies.jpg', size: [480, 854], at: [240, 540], span: 320 } },
       { en: 'Cinnamon Danish', ar: 'دانيش سينابون', price: 19, cals: 170, art: 'danish' },
       { en: 'Marble Cake', ar: 'ماربل كيك', price: 11, cals: 170, art: 'marble' },
       { en: 'Crunchy Chocolate', ar: 'كرانشي شوكلت', price: 8, cals: 170, art: 'crunchy' },
@@ -218,19 +220,35 @@ const guestQuotes = [
 ];
 
 /* --- Gallery ---------------------------------------------------------------
-   Two justified bands: every photograph in a band shares one height and keeps
-   its own proportions, so each band fills the width exactly and nothing sits
-   on top of anything else. `band` says which of the two a photograph is in.
+   Justified bands: every photograph in a band shares one height and keeps its
+   own proportions, so each band fills the width exactly and nothing sits on
+   top of anything else. `band` says which band a photograph is in.
+   The first band is the room itself. SAVVA's Instagram has no photograph of
+   it, so these come from its Google Maps listing, taken by guests; `by` is
+   the contributor's name as Google shows it, credited under the gallery.
+   Every other photograph is SAVVA's own.
    -------------------------------------------------------------------------- */
 const gallery = [
-  { band: 0, img: '/assets/img/coffee-pour-cups.jpg', shape: 'tall', en: 'Filter coffee poured into Savva cups in morning light', ar: 'قهوة مقطّرة تُسكب في أكواب سافا تحت ضوء الصباح' },
-  { band: 0, img: '/assets/img/three-cups-shadow.jpg', shape: 'wide', en: 'Three Savva cold drinks lined up in hard afternoon shadow', ar: 'ثلاثة مشروبات باردة من سافا في ظلّ العصر' },
-  { band: 0, img: '/assets/img/desk-morning.jpg', shape: 'tall', en: 'An iced coffee and a sandwich beside a laptop in the sun', ar: 'قهوة مثلجة وساندوتش بجانب حاسوب تحت أشعة الشمس' },
-  { band: 1, img: '/assets/img/halloumi-sandwich.jpg', shape: 'square', en: 'A halloumi sandwich on Savva branded paper', ar: 'ساندوتش حلوم على ورق سافا' },
-  { band: 1, img: '/assets/img/curbside-tray.jpg', shape: 'tall', en: 'A tray handed through a car window', ar: 'صينية تُسلَّم عبر نافذة السيارة' },
-  { band: 1, img: '/assets/img/slush-wood-table.jpg', shape: 'tall', en: 'A slush on a warm wooden table', ar: 'سلاش على طاولة خشبية دافئة' },
-  { band: 1, img: '/assets/img/three-cups-stone.jpg', shape: 'square', en: 'Cold drinks resting on a stone counter', ar: 'مشروبات باردة على طاولة حجرية' }
+  { band: 0, img: '/assets/img/room-lounge.jpg', shape: 'tall', by: 'إنسكاب', en: 'The lounge: cream sofas, tall plants and two arched windows', ar: 'الصالة: كنبات بلون الكريم ونباتات عالية ونافذتان مقوّستان' },
+  { band: 0, img: '/assets/img/room-latte.jpg', shape: 'tall', by: 'Mazen Albalawi', en: 'A coffee with latte art on a wooden tray, sofas and plants behind', ar: 'قهوة برسمة الحليب على صينية خشبية، وخلفها الكنبات والنباتات' },
+  { band: 0, img: '/assets/img/room-tray.jpg', shape: 'tall', by: 'هديل', en: 'An iced coffee, a small hot coffee and water on a tray with SAVVA packs', ar: 'قهوة مثلجة وقهوة ساخنة صغيرة وماء على صينية مع عبوات سافا' },
+  { band: 1, img: '/assets/img/coffee-pour-cups.jpg', shape: 'tall', en: 'Filter coffee poured into Savva cups in morning light', ar: 'قهوة مقطّرة تُسكب في أكواب سافا تحت ضوء الصباح' },
+  { band: 1, img: '/assets/img/three-cups-shadow.jpg', shape: 'wide', en: 'Three Savva cold drinks lined up in hard afternoon shadow', ar: 'ثلاثة مشروبات باردة من سافا في ظلّ العصر' },
+  { band: 1, img: '/assets/img/desk-morning.jpg', shape: 'tall', en: 'An iced coffee and a sandwich beside a laptop in the sun', ar: 'قهوة مثلجة وساندوتش بجانب حاسوب تحت أشعة الشمس' },
+  { band: 2, img: '/assets/img/halloumi-sandwich.jpg', shape: 'square', en: 'A halloumi sandwich on Savva branded paper', ar: 'ساندوتش حلوم على ورق سافا' },
+  { band: 2, img: '/assets/img/curbside-tray.jpg', shape: 'tall', en: 'A tray handed through a car window', ar: 'صينية تُسلَّم عبر نافذة السيارة' },
+  { band: 2, img: '/assets/img/slush-wood-table.jpg', shape: 'tall', en: 'A slush on a warm wooden table', ar: 'سلاش على طاولة خشبية دافئة' },
+  { band: 2, img: '/assets/img/three-cups-stone.jpg', shape: 'square', en: 'Cold drinks resting on a stone counter', ar: 'مشروبات باردة على طاولة حجرية' }
 ];
+
+/* --- The front, for finding it ---------------------------------------------
+   Shown beside the address so a guest knows the door on arrival. From SAVVA's
+   Google Maps listing, taken by a guest and credited by name. It is not the
+   night facade other SAVVA sites open with. */
+const door = {
+  img: '/assets/img/front-night.jpg', by: 'إنسكاب',
+  alt: { en: 'SAVVA’s front at night: the lit sign, arched doors and the tables outside', ar: 'واجهة سافا ليلًا: اللوحة المضيئة والأبواب المقوّسة والطاولات في الخارج' }
+};
 
 /* --- Interface + editorial copy ------------------------------------------- */
 const copy = {
@@ -282,7 +300,9 @@ const copy = {
     atmosphere: {
       kicker: 'Atmosphere',
       heading: 'Light, shade,\nand a long afternoon.',
-      body: 'Sunlight across a stone counter, a tray carried out to the curb, a table that holds a laptop and a sandwich equally well.'
+      body: 'A quiet lounge under arched windows, sunlight across a stone counter, a tray carried out to the curb, a table that holds a laptop and a sandwich equally well.',
+      credit: 'The room, photographed by guests on Google Maps',
+      creditRest: 'Every other photograph is SAVVA’s own.'
     },
     ritual: {
       kicker: 'The cup',
@@ -323,7 +343,10 @@ const copy = {
       openMaps: 'Open in Google Maps',
       plateRoute: 'Directions',
       plateMaps: 'Google Maps',
-      osm: '© OpenStreetMap'
+      osm: '© OpenStreetMap',
+      door: 'What to look for: the lit SAVVA sign and the tables out front.',
+      photoBy: 'Photo',
+      photoSource: 'Google Maps'
     },
     footer: {
       tagline: facts.tagline,
@@ -381,7 +404,9 @@ const copy = {
     atmosphere: {
       kicker: 'الأجواء',
       heading: 'ضوء وظِل،\nوعصريّة طويلة.',
-      body: 'شمس تعبر طاولة حجرية، وصينية تُحمل إلى الرصيف، وطاولة تتّسع للحاسوب والساندوتش معًا.'
+      body: 'صالة هادئة تحت نوافذ مقوّسة، وشمس تعبر طاولة حجرية، وصينية تُحمل إلى الرصيف، وطاولة تتّسع للحاسوب والساندوتش معًا.',
+      credit: 'صور المكان بعدسة ضيوفنا على خرائط جوجل',
+      creditRest: 'وبقية الصور من سافا.'
     },
     ritual: {
       kicker: 'الكوب',
@@ -422,7 +447,10 @@ const copy = {
       openMaps: 'افتح في خرائط جوجل',
       plateRoute: 'الاتجاهات',
       plateMaps: 'خرائط جوجل',
-      osm: '© OpenStreetMap'
+      osm: '© OpenStreetMap',
+      door: 'علامتك: لوحة سافا المضيئة والطاولات أمام المدخل.',
+      photoBy: 'تصوير',
+      photoSource: 'خرائط جوجل'
     },
     footer: {
       tagline: facts.tagline,
@@ -433,4 +461,4 @@ const copy = {
   }
 };
 
-module.exports = { site, facts, menu, signature, ritual, guestQuotes, gallery, copy };
+module.exports = { site, facts, menu, signature, ritual, guestQuotes, gallery, door, copy };

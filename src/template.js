@@ -3,7 +3,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { site, facts, menu, signature, ritual, guestQuotes, gallery, copy } = require('./content.js');
+const { site, facts, menu, signature, ritual, guestQuotes, gallery, door, copy } = require('./content.js');
 const menuArt = require('./menu-art.js');
 const { HALF_H: MAP_HALF } = require('./map-svg.js');
 
@@ -57,7 +57,8 @@ const SIZES = {
   pour: '30rem',
   tile: '(min-width: 56rem) 30vw, 50vw',
   tileWide: '(min-width: 56rem) 50vw, 100vw',
-  ritual: '(min-width: 56rem) 34vw, 80vw'
+  ritual: '(min-width: 56rem) 34vw, 80vw',
+  door: '24rem'
 };
 const HERO_LEAD = '/assets/img/hibiscus-pour.jpg';
 
@@ -305,7 +306,9 @@ function menuSection(t) {
 const ASPECT = { tall: .75, square: 1, wide: 1.5 };
 
 function atmosphere(t) {
-  const bands = [0, 1].map((b) => gallery.map((g, i) => ({ g, i })).filter((x) => x.g.band === b));
+  const bands = [...new Set(gallery.map((g) => g.band))].sort((a, b) => a - b)
+    .map((b) => gallery.map((g, i) => ({ g, i })).filter((x) => x.g.band === b));
+  const by = [...new Set(gallery.filter((g) => g.by).map((g) => g.by))];
   return `<section class="atmos" id="atmosphere" aria-labelledby="atmos-h">
   <div class="wrap">
     <header class="atmos__head">
@@ -322,6 +325,7 @@ function atmosphere(t) {
         </figure>`).join('')}
       </div>`).join('')}
     </div>
+    ${by.length ? `<p class="atmos__credit reveal">${esc(t.atmosphere.credit)}: ${by.map((n) => `<bdi>${esc(n)}</bdi>`).join(' · ')}. ${esc(t.atmosphere.creditRest)}</p>` : ''}
   </div>
 </section>`;
 }
@@ -515,6 +519,10 @@ function location(t) {
         <a class="btn btn--solid" href="${facts.directions}" target="_blank" rel="noopener">${esc(L.directions)}</a>
         <a class="btn btn--ghost" href="tel:${facts.phoneHref}">${esc(L.call)}</a>
       </div>
+      <figure class="loc__door reveal">
+        <img ${photo(t, door.img, SIZES.door)} alt="${esc(door.alt[t.lang])}" width="480" height="640" loading="lazy" decoding="async">
+        <figcaption>${esc(L.door)}<small>${esc(L.photoBy)}: <bdi>${esc(door.by)}</bdi> · ${esc(L.photoSource)}</small></figcaption>
+      </figure>
     </div>
     <div class="loc__map reveal">
       ${xmap(t)}

@@ -121,7 +121,8 @@ switches live in one `:root:lang(ar), [dir="rtl"]` block in the stylesheet.
 | Streets, buildings, parks, landmark names on the map | OpenStreetMap (© OpenStreetMap contributors, ODbL) |
 | Positioning line, city, tagline, handle | Instagram `@savva_cafe` |
 | Every menu item, price and calorie figure | The SAVVA menu PDF's own text layer, extracted in both scripts |
-| Photography | SAVVA's own Instagram posts |
+| Photography | SAVVA's own Instagram posts; the Madini Cookies card SAVVA posted to its Google Maps listing |
+| Photographs of the room and the front | Guests' photos on the same Google Maps listing, credited by name on the page |
 
 Four English spellings are corrected from the print file where the Arabic
 confirms the intended product — `FLAT WAIT` → Flat White, `WAIT MOCAH` → White
@@ -213,10 +214,17 @@ wide screens a category is set in two columns, like the printed menu.
 
 ## The gallery
 
-Two justified bands. Every photograph in a band shares one height and keeps
+Justified bands. Every photograph in a band shares one height and keeps
 its own proportions, so each band fills the width exactly — nothing overlaps
 and nothing is left hanging. On a phone the bands dissolve into a two-column
 grid. `band` on each entry in `content.js` says which band it is in.
+
+The first band is the room: the lounge under its arched windows, a coffee on
+the lounge table, a tray of drinks. SAVVA's Instagram has no photograph of the
+inside, so these are guests' photos from the Google Maps listing; `by` holds
+the contributor's name and the page credits them under the gallery. The front
+at night, beside the address in *Visit*, is credited the same way. Neither is
+the night facade other SAVVA sites open with.
 
 ## The location card
 
