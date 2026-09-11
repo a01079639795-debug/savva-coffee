@@ -222,6 +222,17 @@
 
   function updateRitual() {
     if (!cup || isReduced()) return;
+    // below the desktop split the scene no longer pins to a scroll track —
+    // it rests at the stylesheet's own values instead of scaling sharply
+    // under a phone's fast scroll, see the ritual media query in the CSS
+    if (narrow.matches) {
+      cup.style.removeProperty('--t');
+      cup.style.removeProperty('--enter');
+      cup.style.removeProperty('--dom');
+      cup.style.removeProperty('--name');
+      cup.style.removeProperty('--exit');
+      return;
+    }
     var box = cup.getBoundingClientRect();
     if (box.bottom < 0 || box.top > window.innerHeight) return;
     var travel = box.height - window.innerHeight;
